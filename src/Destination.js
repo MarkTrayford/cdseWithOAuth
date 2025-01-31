@@ -87,8 +87,7 @@ module.exports = class Destination {
 					readConnectivity(locationId)
 						.then(connectivityConfig => {
 							if ( this.credentials.Authentication === "OAuth2ClientCredentials" ) {
-                                //axios.defaults.headers.common['Authorization'] = this.authTokens[0].http_header.value;
-                                //axiosConfig.headers =  {};
+                                if (!axiosConfig.headers) axiosConfig.headers = {};
                                 axiosConfig.headers['Authorization'] = this.authTokens[0].http_header.value; // add bearer token
                             }
 
@@ -117,8 +116,7 @@ module.exports = class Destination {
 					getAxiosConfig(options, this.credentials)
 						.then(axiosConfig => {
 							if ( this.credentials.Authentication === "OAuth2ClientCredentials" ) {
-                                //axios.defaults.headers.common['Authorization'] = this.authTokens[0].http_header.value;
-                                //axiosConfig.headers =  {};
+								if (!axiosConfig.headers) axiosConfig.headers = {};
                                 axiosConfig.headers['Authorization'] = this.authTokens[0].http_header.value; // add bearer token
                             }
 							return axios(axiosConfig);
