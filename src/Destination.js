@@ -74,7 +74,8 @@ module.exports = class Destination {
 		// if (credentials.url === undefined && credentials.Authentication !== "NoAuthentication" && credentials.Authentication !== "BasicAuthentication") {
 		// 	throw new Error(`CDSE: Authentication Type ${credentials.Authentication} is not supported!`);
 		// }
-		this.credentials = credentials;
+		this.credentials = credentials.destinationConfiguration;
+		this.authTokens = credentials.authTokens;
 	}
 
 	run(options) {
@@ -85,6 +86,12 @@ module.exports = class Destination {
 				case "OnPremise":
 					readConnectivity(locationId)
 						.then(connectivityConfig => {
+							if ( this.credentials.Authentication === "OAuth2ClientCredentials" ) {
+                                //axios.defaults.headers.common['Authorization'] = this.authTokens[0].http_header.value;
+                                //axiosConfig.headers =  {};
+                                axiosConfig.headers['Authorization'] = this.authTokens[0].http_header.value; // add bearer token
+                            }
+
 							return getAxiosConfig(options, this.credentials, connectivityConfig);
 						})
 						.then(axiosConfig => {

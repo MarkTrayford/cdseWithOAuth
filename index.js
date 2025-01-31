@@ -16,7 +16,7 @@ function to(destination) {
 		if (config.credentials.destination) {
 			readDestination(config.credentials.destination)
 				.then(credentials => {
-					resolve(new Destination(credentials.destinationConfiguration));
+					resolve(new Destination(credentials));
 				})
 				.catch(reject);
 		} else if (config.credentials.url) {
