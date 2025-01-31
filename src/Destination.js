@@ -116,6 +116,11 @@ module.exports = class Destination {
 				case "Internet":
 					getAxiosConfig(options, this.credentials)
 						.then(axiosConfig => {
+							if ( this.credentials.Authentication === "OAuth2ClientCredentials" ) {
+                                //axios.defaults.headers.common['Authorization'] = this.authTokens[0].http_header.value;
+                                //axiosConfig.headers =  {};
+                                axiosConfig.headers['Authorization'] = this.authTokens[0].http_header.value; // add bearer token
+                            }
 							return axios(axiosConfig);
 						})
 						.then(results => {
