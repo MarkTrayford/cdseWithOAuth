@@ -115,6 +115,30 @@ module.exports = class Destination {
 				case "Internet":
 					getAxiosConfig(options, this.credentials)
 						.then(axiosConfig => {
+							axios.interceptors.request.use(request => {
+								if (process.env.DEBUG === "true") {
+									console.log('Starting Request', request);
+								}
+								return request;
+							}, error => {
+								if (process.env.DEBUG === "true") {
+									console.error('Request Error', error);
+								}
+								return Promise.reject(error);
+							});
+							
+							// Add a response interceptor
+							axios.interceptors.response.use(response => {
+								if (process.env.DEBUG === "true") {
+									console.log('Response:', response);
+								}
+								return response;
+							}, error => {
+								if (process.env.DEBUG === "true") {
+									console.error('Response Error', error);
+								}
+								return Promise.reject(error);
+							});
 							if ( this.credentials.Authentication === "OAuth2ClientCredentials" ) {
 								if (!axiosConfig.headers) axiosConfig.headers = {};
                                 axiosConfig.headers['Authorization'] = this.authTokens[0].http_header.value; // add bearer token
